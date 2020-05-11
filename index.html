@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .box{
+            width: 800px;
+            margin: 0 auto;
+        }
+        .flex{
+            display: flex;
+        }
+        .center{
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="box">
+    <input type="text" value="文案测试" style="width: 200px" onkeypress="runScript(event)" placeholder="输入需要搜索的关键词后回车">
+    <button>取消搜索</button>
+    <button id="next" onclick="down(event)">下一个</button>
+    <button id="pre" onclick="up(event)">上一个</button>
+    <div>
+        <span id="count">命中总数：</span>
+        <span id="currentCount">当前命中：</span>
+    </div>
+    <h1 class="center">搜索区域</h1>
+    <div id="test1">
+        <div>
+            <h2>跨标签文案</h2>
+            <div class="flex">
+                <div>
+                    这是一段跨标签
+                </div>
+                <div>
+                    跨多个标签
+                </div>
+                <div>
+                    组成的文案
+                </div>
+                <div>
+                    测试
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="./dist/index.umd.js"></script>
+<script>
+    var countDom = document.querySelector('#count')
+    var currentCountDom = document.querySelector('#currentCount')
+
+    var betterSearch = new BetterSearch({
+        domContainer: '#test1'
+    })
+    function setValue() {
+
+        countDom.innerHTML = `命中总数：${betterSearch.count}`
+        currentCountDom.innerHTML = `当前命中：${betterSearch.searchIndex}`
+    }
+ function runScript(e) {
+     if (e.keyCode == 13) {
+        var keyword = e.currentTarget.value
+         betterSearch.searchEntry(keyword)
+        setValue()
+     }
+ }
+ function down(e) {
+    betterSearch.down()
+     setValue()
+ }
+ function up(e) {
+    betterSearch.up()
+     setValue()
+ }
+
+</script>
+</body>
+</html>
