@@ -13,7 +13,7 @@ class BetterSearch {
         //搜索关键词
         this.keyword = ''
         //黑名单
-        this.blackClassName = []
+        this.blackClassName = opt.blackClassName || []
         //命中关键词所在的DOM和整个文本，便于后续跨标签匹配
         this.searchDom = {
             text: '',

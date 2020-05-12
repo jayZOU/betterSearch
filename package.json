@@ -1,10 +1,11 @@
 {
   "name": "bettersearch",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "More powerful search box than ctrf + f",
-  "main": "./dist/index.js",
+  "main": "dist/index.js",
   "scripts": {
-    "build": "rollup ./src/index.js --file ./dist/index.js --format cjs",
+    "build": "cross-env NODE_ENV=production rollup -c",
+    "dev": "rollup -c -w",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -27,7 +28,11 @@
     "babel-core": "^6.26.3",
     "babel-plugin-external-helpers": "^6.22.0",
     "babel-preset-latest": "^6.24.1",
+    "cross-env": "^7.0.2",
     "rollup-plugin-babel": "^3.0.7",
     "rollup-plugin-node-resolve": "^5.2.0"
+  },
+  "dependencies": {
+    "rollup-plugin-uglify": "^6.0.4"
   }
 }
