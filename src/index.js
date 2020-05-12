@@ -32,12 +32,13 @@ class BetterSearch {
 
         //插入默认的style
         const css = `.${currentSelectClass}{background: #FF9632 !important;}`
-        let style = document.createElement('style');
-        style.appendChild(document.createTextNode(css));
-        document.head.appendChild(style);
+        let style = document.createElement('style')
+        style.appendChild(document.createTextNode(css))
+        document.head.appendChild(style)
     }
-    searchEntry(keyword) {
+    search(keyword) {
         if(!this.domContainer || !keyword) return
+        this.clear()
         this.keyword = keyword.trim()
         const dom = document.querySelector(this.domContainer)
         this.dom = dom
@@ -134,7 +135,6 @@ class BetterSearch {
         }
         this.resetAllSelectClass()
         this.goNode(this.searchIndex)
-        //          this.removeSelectClass(this.domList[this.searchIndex >= this.domList.length ? 0 : this.searchIndex])
     }
     //清除所有高亮节点
     resetAllSelectClass() {
