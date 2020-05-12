@@ -17,12 +17,17 @@
         .center{
             text-align: center;
         }
+        .overflow-x{
+            width: 300px;
+            height: 200px;
+            overflow: auto;
+        }
     </style>
 </head>
 <body>
 <div class="box">
-    <input type="text" value="文案测试" style="width: 200px" onkeypress="runScript(event)" placeholder="输入需要搜索的关键词后回车">
-    <button>取消搜索</button>
+    <input type="text" value="兮" style="width: 200px" onkeypress="runScript(event)" placeholder="输入需要搜索的关键词后回车">
+    <button id="clear" onclick="clear(event)">取消搜索</button>
     <button id="next" onclick="down(event)">下一个</button>
     <button id="pre" onclick="up(event)">上一个</button>
     <div>
@@ -48,6 +53,44 @@
                 </div>
             </div>
         </div>
+        <div>
+            <h2>滚动窗口</h2>
+            <div class="overflow-x">
+                思美人兮，揽涕而儜眙。
+                媒绝路阻兮，言不可结而诒。
+                蹇蹇之烦冤兮，陷滞而不发。
+                申旦以舒中情兮，志沉菀而莫达。
+                原寄言於浮云兮，遇丰隆而不将。
+                因归鸟而致辞兮，羌迅高而难当。
+                高辛之灵晟兮，遭玄鸟而致诒。
+                欲变节以从俗兮，媿易初而屈志。
+                独历年而离愍兮，羌冯心犹未化。
+                宁隐闵而寿考兮，何变易之可为。
+                知前辙之不遂兮，未改此度。
+                车既覆而马颠兮，蹇独怀此异路。
+                勒骐骥而更驾兮，造父为我操之。
+                迁逡次而勿驱兮，聊假日以须时。
+                指嶓冢之西隈兮，与纁黄以为期。
+                开春发岁兮，白日出之悠悠。
+                吾将荡志而愉乐兮，遵江、夏以娱忧。
+                揽大薄之芳茝兮，搴长洲之宿莽。
+                惜吾不及古人兮，吾谁与玩此芳草。
+                解萹薄与杂菜兮，备以为交佩。
+                佩缤纷以缭转兮，遂萎绝而离异。
+                吾且儃佪以娱忧兮，观南人之变态。
+                窃快在其中心兮，扬厥凭而不俟。
+                芳与泽其杂糅兮，羌芳华自中出。
+                纷郁郁其远蒸兮，满内而外扬。
+                情与质信可保兮，羌居蔽而闻章。
+                令薜荔以为理兮，惮举趾而缘木。
+                因芙蓉而为媒兮，惮褰裳而濡足。
+                登高吾不说兮，入下吾不能。
+                固朕形之不服兮，然容与而狐疑。
+                广遂前画兮，未改此度也。
+                命则处幽吾将罢兮，原及白日之未暮也。
+                独茕茕而南行兮，思彭咸之故也
+            </div>
+        </div>
     </div>
 </div>
 
@@ -64,21 +107,26 @@
         countDom.innerHTML = `命中总数：${betterSearch.count}`
         currentCountDom.innerHTML = `当前命中：${betterSearch.searchIndex}`
     }
- function runScript(e) {
-     if (e.keyCode == 13) {
-        var keyword = e.currentTarget.value
-         betterSearch.searchEntry(keyword)
-        setValue()
+     function runScript(e) {
+         if (e.keyCode == 13) {
+            var keyword = e.currentTarget.value
+             betterSearch.searchEntry(keyword)
+            setValue()
+         }
      }
- }
- function down(e) {
-    betterSearch.down()
-     setValue()
- }
- function up(e) {
-    betterSearch.up()
-     setValue()
- }
+     function down(e) {
+        betterSearch.down()
+         setValue()
+     }
+     function up(e) {
+        betterSearch.up()
+         setValue()
+     }
+     function clear(e) {
+        debugger
+        betterSearch.clear()
+         setValue()
+     }
 
 </script>
 </body>

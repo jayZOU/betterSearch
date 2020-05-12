@@ -1,15 +1,17 @@
 import { isRealNode, isSetClassName, checkClassName, searchSubStr, formatTextNode, regExpescape } from './utils'
 
+//选中的class name
 const currentSelectClass = '__better-search-current-select'
+//标记id
+let markId = 0
 
 class BetterSearch {
     constructor(opt) {
         //搜索区域
         this.domContainer = opt.domContainer || null
+        this.dom = null
         //搜索关键词
         this.keyword = ''
-        //滚动节点记录
-        this.overflowXDom = []
         //黑名单
         this.blackClassName = []
         //命中关键词所在的DOM和整个文本，便于后续跨标签匹配
@@ -23,6 +25,10 @@ class BetterSearch {
         this.domList = []
         //当前命中的索引
         this.searchIndex = -1
+        //横向滚动条
+        this.overflowXDom = []
+        //纵向滚动条
+        this.overflowYDom = []
 
         //插入默认的style
         const css = `.${currentSelectClass}{background: #FF9632 !important;}`
@@ -34,6 +40,7 @@ class BetterSearch {
         if(!this.domContainer || !keyword) return
         this.keyword = keyword.trim()
         const dom = document.querySelector(this.domContainer)
+        this.dom = dom
 
         //深度优先处理待搜索的dom
         this.formatDom(dom, this.keyword)
@@ -104,7 +111,7 @@ class BetterSearch {
             text: '',
             data: {}
         }
-        this.markId = 0
+        markId = 0
     }
     //下一个
     down() {
@@ -146,8 +153,34 @@ class BetterSearch {
     goNode(index) {
         const that = this
         this.domList[index].forEach(list => {
-            // const item = list.getBoundingClientRect()
-            // const wrap = that.srcoll.getBoundingClientRect()
+            const parentNodeList = that.getParentNodeList(list)
+            const item = list.getBoundingClientRect()
+            let overflowX = null
+            let overflowY = null
+            for(let pn of parentNodeList) {
+                const indexY = that.overflowYDom.indexOf(pn)
+                const indexX = that.overflowXDom.indexOf(pn)
+                if(indexY > -1) {
+                    //存在纵向滚动
+                    overflowY = that.overflowYDom[indexY]
+                    break
+                }
+                if(indexX > -1) {
+                    //存在横向滚动
+                    overflowX = that.overflowXDom[indexX]
+                    break
+                }
+            }
+            if(overflowY) {
+                const wrapY = overflowY.getBoundingClientRect()
+                const itemTop = item.top + overflowY.scrollTop
+                //纵向距离
+                let offsetTop = itemTop - wrapY.top - 60
+                //纵向定位
+                overflowY.scrollTo(0, offsetTop ? offsetTop : 0)
+            }
+
+            // const wrapX = overflowX.getBoundingClientRect()
             // const itemTop = item.top + that.srcoll.scrollTop
             // const wrapTop = wrap.top
             // //纵向距离
@@ -167,6 +200,18 @@ class BetterSearch {
             //染色
             that.addSelectClass([list])
         })
+    }
+    //获取所有父级节点
+    getParentNodeList(el) {
+        const parentNodeList = []
+        let currentDom = el
+        parentNodeList.push(el)
+        while (!currentDom.isEqualNode(this.dom)) {
+
+            parentNodeList.push(currentDom.parentNode)
+            currentDom = currentDom.parentNode
+        }
+        return parentNodeList
     }
     //高亮染色
     addSelectClass(dom) {
@@ -215,10 +260,9 @@ class BetterSearch {
                     html +
                     splitText +
                     (i < splitTextList.length - 1
-                        ? `<mark class="search-highlight" mark-id="${this.markId}" overflow-x-index="${this.overflowXDom.length -
-                        1}">${highlightList[i]}</mark>`
+                        ? `<mark class="search-highlight" mark-id="${markId}">${highlightList[i]}</mark>`
                         : `<template search-highlight>${el.data}</template>`)
-                if (isSame) this.markId++
+                if (isSame) markId++
                 return text
             },
             ''
@@ -232,12 +276,13 @@ class BetterSearch {
             if (el.nodeType === 1 || el.nodeType === 3) {
                 //页面内存在滚动节点的话，需要记录
                 if (isRealNode(el)) {
-                    //找到真实滚动的节点
-                    for (let i = 0; i < el.childNodes.length; i++) {
-                        if (isRealNode(el.childNodes[i])) {
-                            this.overflowXDom.push(el.childNodes[i])
-                            break
-                        }
+                    if(el.scrollHeight > el.clientHeight) {
+                        //纵向滚动条
+                        this.overflowYDom.push(el)
+                    }
+                    if(el.scrollWidth > el.clientWidth) {
+                        //横向滚动条
+                        this.overflowXDom.push(el)
                     }
                 }
                 if (
