@@ -1,6 +1,8 @@
 # betterSearch
 比浏览器CTRF+F更强大的搜索框组件
 
+[demo](https://codepen.io/jayzou/pen/zYvampj)
+
 ## 安装
 
 `<script src="https://cdn.jsdelivr.net/npm/bettersearch/dist/index.umd.js"></script>`
