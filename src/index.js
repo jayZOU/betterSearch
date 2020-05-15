@@ -30,9 +30,14 @@ class BetterSearch {
         //纵向滚动条
         this.overflowYDom = []
 
-        //插入默认的style
+        this.initStyle()
+    }
+    //插入默认的style
+    initStyle() {
+        if(document.querySelector('style[type="betterSearch"]')) return
         const css = `.${currentSelectClass}{background: #FF9632 !important;}`
         let style = document.createElement('style')
+        style.setAttribute('type', 'betterSearch')
         style.appendChild(document.createTextNode(css))
         document.head.appendChild(style)
     }
